@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Timeline Tool</title>
+    <style>
+      body {
+      background-color: peachpuff;
+      }
+      .tray {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 1rem;
+    }
+      </style>
+  </head>
+
+  <body>
+    <div class="tray">
+      <form id="" action="/add"  method="POST">
+      <label for="status">Status Update:</label>
+      <input type="text" id="status" name="status" placeholder="What's on your mind?" required />
+
+      <label for="emoji">Emoji:</label>
+      <button type="button" id="emojiPicker">😊</button>
+      <input type="hidden" id="emoji" name="emoji" />
+
+      <label for="colour">Background Colour:</label>
+      <input type="color" id="colour" name="colour" value="#ffdab9" />
+
+      <button type="submit">Add Entry</button>
+    </form>
+    </div>
+
+    <section class="timeline" id="timeline">
+      {% for item in timeline%}
+      <div style="background-color: {{item.colour}}">
+        <p>{{item.emoji}} {{item.status}}</p>
+        <p>{{item.timestamp}}</p>
+      </div>
+      {%endfor%}
+    </section>
+
+    <script type="module">
+      import { EmojiButton } from "https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@4.6.0";
+
+      const picker = new EmojiButton();
+      const emojiPickerButton = document.getElementById("emojiPicker");
+      const emojiInput = document.getElementById("emoji");
+
+      picker.on("emoji", (selection) => {
+        const emoji = selection.emoji; // Extract the emoji character
+        emojiInput.value = emoji; // Update hidden input with emoji
+        emojiPickerButton.textContent = emoji; // Show selected emoji on button
+      });
+
+      emojiPickerButton.addEventListener("click", () => {
+        picker.togglePicker(emojiPickerButton); // Show/hide picker
+      });
+    </script>
+  </body>
+</html>
